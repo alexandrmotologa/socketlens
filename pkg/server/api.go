@@ -42,8 +42,8 @@ func NewAPIServer(mgr *client.Manager, hub *TimelineHub) *APIServer {
 	}
 }
 
-// Routes sets up the chi router with CORS and JSON endpoints.
-func (s *APIServer) Routes() http.Handler {
+// APIRoutes sets up the router for /api endpoints with CORS and JSON handlers.
+func (s *APIServer) APIRoutes() http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
@@ -55,7 +55,7 @@ func (s *APIServer) Routes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	r.Route("/api/v1", func(r chi.Router) {
+	r.Route("/v1", func(r chi.Router) {
 		// Connection endpoints
 		r.Post("/connections", s.handleCreateConnection)
 		r.Get("/connections", s.handleListConnections)
@@ -102,11 +102,26 @@ func (s *APIServer) Routes() http.Handler {
 		// Export endpoints
 		r.Get("/export/har", s.handleExportHAR)
 		r.Get("/export/commands", s.handleExportCommands)
+
+		// UI Stream Timeline Feed
+		r.HandleFunc("/feed", s.hub.HandleWS)
 	})
 
-	// Internal control WebSocket
-	r.HandleFunc("/ws/control", s.hub.HandleWS)
+	return r
+}
 
+// WSRoutes sets up the router for /ws endpoints.
+func (s *APIServer) WSRoutes() http.Handler {
+	r := chi.NewRouter()
+	r.HandleFunc("/control", s.hub.HandleWS)
+	return r
+}
+
+// Routes sets up legacy chi router with CORS and JSON endpoints.
+func (s *APIServer) Routes() http.Handler {
+	r := chi.NewRouter()
+	r.Mount("/api", s.APIRoutes())
+	r.Mount("/ws", s.WSRoutes())
 	return r
 }
 

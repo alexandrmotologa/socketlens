@@ -1,10 +1,63 @@
-# SocketLens
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo.png">
+    <img src="docs/images/logo.png" alt="SocketLens Logo" width="128" style="border-radius: 24px;" />
+  </picture>
+</p>
 
-SocketLens is a local-first workbench and CLI for streaming protocols, including WebSocket, Server-Sent Events (SSE), and Socket.io. It inspects live traffic, decodes binary payloads in real time, runs embedded mock servers with chaos simulation, and executes concurrent load tests from a single self-contained binary.
+<h1 align="center">SocketLens</h1>
 
-[![Go Version](https://img.shields.io/badge/go-1.23%2B-blue)](https://golang.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey)](https://github.com/alexandrmotologa/socketlens)
+<p align="center">
+  <strong>High-performance streaming workbench, binary codec inspector, and chaos lab for WebSocket, SSE, and Socket.io.</strong>
+</p>
+
+<p align="center">
+  <a href="https://golang.org"><img src="https://img.shields.io/badge/go-1.23%2B-blue" alt="Go Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://github.com/alexandrmotologa/socketlens"><img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey" alt="Platform"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#visual-walkthrough">Visual Walkthrough</a> &bull;
+  <a href="#capabilities">Capabilities</a> &bull;
+  <a href="#installation">Installation</a> &bull;
+  <a href="#architecture-overview">Architecture</a> &bull;
+  <a href="#documentation">Documentation</a>
+</p>
+
+<p align="center">
+  <img src="docs/images/socketlens_demo.gif" alt="SocketLens Interactive Studio Demo" width="100%" />
+</p>
+
+---
+
+## Visual Walkthrough
+
+### Interactive Stream Studio
+Virtualize tens of thousands of incoming and outgoing frames, inspect binary and JSON payloads, examine live payload diffs, and filter streams by opcode, size, or regex.
+
+![SocketLens Studio Timeline](docs/images/socketlens_studio.png)
+
+### Bi-Directional Interception Proxy & Live Tampering
+Place non-blocking or blocking breakpoints on live streams. Intercept payloads in transit, edit contents before upstream delivery, or drop frames on the fly.
+
+![SocketLens Interception Proxy](docs/images/socketlens_proxy.png)
+
+### LLM & AI Stream Telemetry
+Measure Time-To-First-Token (TTFT), real-time Tokens Per Second (TPS), and inter-token jitter on Server-Sent Events. Reassemble token fragments into rendered markdown and parse structured tool calls.
+
+![SocketLens LLM Telemetry](docs/images/socketlens_llm.png)
+
+### Real-Time JSON Schema Validation
+Validate streaming events against JSON Schema (Draft-07) specifications as frames arrive. Instantly locate breaking contract changes with inline visual diagnostics.
+
+![SocketLens Schema Validation](docs/images/socketlens_schema.png)
+
+### Concurrency Stress Benchmark
+Stress-test streaming servers with 100 to 10,000 concurrent client connections. Track latency percentiles (p50, p95, p99), frame distribution, and throughput stability under load.
+
+![SocketLens Stress Runner](docs/images/socketlens_bench.png)
 
 ---
 
@@ -23,7 +76,6 @@ SocketLens is a local-first workbench and CLI for streaming protocols, including
 - **Session Recording and Replay**: Record live streaming sessions to `.jsonl` archives and replay frame sequences with millisecond accuracy and adjustable speed multipliers.
 - **Dual Interface**: Run interactive sessions in your terminal through the built-in TUI or launch the local web studio with virtualized timeline scrolling and Monaco editor integration.
 - **Zero Runtime Dependencies**: Packaged as a single Go binary with an embedded React frontend, consuming under 35 MB of RAM at idle.
-
 
 ---
 

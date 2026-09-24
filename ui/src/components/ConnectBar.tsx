@@ -16,7 +16,7 @@ export const ConnectBar: React.FC<ConnectBarProps> = ({
   isConnecting,
 }) => {
   const [protocol, setProtocol] = useState<Protocol>('ws');
-  const [url, setUrl] = useState('wss://echo.websocket.events');
+  const [url, setUrl] = useState('ws://127.0.0.1:8080/ws/feed');
   const [headersJson, setHeadersJson] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const [tlsInsecure, setTlsInsecure] = useState(false);

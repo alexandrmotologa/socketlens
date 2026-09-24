@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <clipPath id="squircle-clip">
+      <rect x="24" y="24" width="976" height="976" rx="220" />
+    </clipPath>
+
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <linearGradient id="cyan-lens" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <filter id="subtle-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#0f172a" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Luxury White Squircle Container -->
+  <rect x="24" y="24" width="976" height="976" rx="220" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
+
+  <g clip-path="url(#squircle-clip)">
+    <g transform="translate(512, 512)" filter="url(#subtle-shadow)">
+
+      <!-- Hexagonal Architectural Gateway Frame -->
+      <polygon points="
+        0,-390
+        338,-195
+        338,195
+        0,390
+        -338,195
+        -338,-195
+      " fill="none" stroke="#0f172a" stroke-width="40" stroke-linejoin="round" />
+
+      <!-- Inner Telemetry Dashed Hexagon -->
+      <polygon points="
+        0,-355
+        307,-177
+        307,177
+        0,355
+        -307,177
+        -307,-177
+      " fill="none" stroke="#00f5ff" stroke-width="4" opacity="0.45" stroke-dasharray="16, 12" />
+
+      <!-- 100% Watertight Solid Base Silhouette -->
+      <path d="
+        M 0,-130
+        L -110,-170
+        L -210,-280
+        L -190,-120
+        L -260,20
+        L -210,180
+        L -130,310
+        L 0,355
+        L 130,310
+        L 210,180
+        L 260,20
+        L 190,-120
+        L 210,-280
+        L 110,-170
+        Z
+      " fill="#0b0f19" />
+
+      <!-- Owl Ear Tufts (Plumicorns) -->
+      <!-- Left Ear Outer & Inner Facets -->
+      <polygon points="-110,-170 -210,-280 -190,-120" fill="#1e293b" />
+      <polygon points="-110,-170 -210,-280 -150,-150" fill="#334155" />
+      <polygon points="-170,-220 -210,-280 -190,-200" fill="#475569" />
+
+      <!-- Right Ear Outer & Inner Facets -->
+      <polygon points="110,-170 210,-280 190,-120" fill="#0f172a" />
+      <polygon points="110,-170 210,-280 150,-150" fill="#1e293b" />
+      <polygon points="170,-220 210,-280 190,-200" fill="#334155" />
+
+      <!-- Forehead Crown Plateau -->
+      <polygon points="0,-130 -110,-170 -150,-150 0,-90" fill="#334155" />
+      <polygon points="0,-130 110,-170 150,-150 0,-90" fill="#1e293b" />
+      <polygon points="0,-90 -150,-150 -100,-70 0,-50" fill="#475569" />
+      <polygon points="0,-90 150,-150 100,-70 0,-50" fill="#334155" />
+
+      <!-- Outer Cheeks / Feathers -->
+      <polygon points="-190,-120 -260,20 -180,40 -100,-70" fill="#1e293b" />
+      <polygon points="190,-120 260,20 180,40 100,-70" fill="#334155" />
+      <polygon points="-260,20 -210,180 -140,150 -180,40" fill="#0f172a" />
+      <polygon points="260,20 210,180 140,150 180,40" fill="#1e293b" />
+
+      <!-- Facial Disc & Eye Hoods -->
+      <polygon points="0,-50 -100,-70 -160,0 -80,10 0,0" fill="#334155" />
+      <polygon points="0,-50 100,-70 160,0 80,10 0,0" fill="#1e293b" />
+
+      <!-- Left Predator Lens Eye -->
+      <!-- Socket -->
+      <polygon points="-60,-5 -155,-5 -175,45 -125,85 -60,45" fill="#080c14" stroke="#00f5ff" stroke-width="4" stroke-linejoin="round" />
+      <!-- Iris Aperture -->
+      <polygon points="-75,8 -142,8 -155,42 -120,68 -75,38" fill="url(#cyan-glow)" />
+      <!-- Slit Focus Pupil -->
+      <polygon points="-110,18 -118,36 -112,54 -104,36" fill="#05080f" />
+      <!-- Glint -->
+      <polygon points="-132,22 -124,22 -128,30" fill="#ffffff" opacity="0.95" />
+
+      <!-- Right Predator Lens Eye -->
+      <!-- Socket -->
+      <polygon points="60,-5 155,-5 175,45 125,85 60,45" fill="#080c14" stroke="#00f5ff" stroke-width="4" stroke-linejoin="round" />
+      <!-- Iris Aperture -->
+      <polygon points="75,8 142,8 155,42 120,68 75,38" fill="url(#cyan-glow)" />
+      <!-- Slit Focus Pupil -->
+      <polygon points="110,18 104,36 112,54 118,36" fill="#05080f" />
+      <!-- Glint -->
+      <polygon points="124,22 132,22 128,30" fill="#ffffff" opacity="0.95" />
+
+      <!-- Hooked Obsidian Predator Beak -->
+      <polygon points="0,0 -40,30 0,110" fill="#475569" />
+      <polygon points="0,0 40,30 0,110" fill="#1e293b" />
+      <polygon points="0,110 -25,80 0,150" fill="#334155" />
+      <polygon points="0,110 25,80 0,150" fill="#0f172a" />
+      <line x1="0" y1="0" x2="0" y2="150" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+
+      <!-- Breastplate Chevron Armor -->
+      <polygon points="0,150 -70,195 0,250" fill="#334155" />
+      <polygon points="0,150 70,195 0,250" fill="#1e293b" />
+
+      <polygon points="0,250 -90,300 0,355" fill="#475569" />
+      <polygon points="0,250 90,300 0,355" fill="#334155" />
+
+      <polygon points="-140,150 -70,195 -90,300 -130,310 -210,180" fill="#0f172a" />
+      <polygon points="140,150 70,195 90,300 130,310 210,180" fill="#1e293b" />
+
+      <!-- Fine Telemetry Cyan Grid Accents -->
+      <line x1="-155" y1="-5" x2="-190" y2="-120" stroke="#00f5ff" stroke-width="2.5" opacity="0.4" />
+      <line x1="155" y1="-5" x2="190" y2="-120" stroke="#00f5ff" stroke-width="2.5" opacity="0.4" />
+      <line x1="-125" y1="85" x2="-140" y2="150" stroke="#00f5ff" stroke-width="2" opacity="0.5" />
+      <line x1="125" y1="85" x2="140" y2="150" stroke="#00f5ff" stroke-width="2" opacity="0.5" />
+      <line x1="-70" y1="195" x2="0" y2="250" stroke="#00f5ff" stroke-width="2" opacity="0.5" />
+      <line x1="70" y1="195" x2="0" y2="250" stroke="#00f5ff" stroke-width="2" opacity="0.5" />
+      <line x1="0" y1="250" x2="0" y2="355" stroke="#00f5ff" stroke-width="2.5" opacity="0.7" />
+
+    </g>
+  </g>
+</svg>

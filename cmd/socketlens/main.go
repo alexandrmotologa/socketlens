@@ -62,8 +62,9 @@ func runWebStudio(cmd *cobra.Command, args []string) error {
 	api := server.NewAPIServer(mgr, hub)
 
 	r := chi.NewRouter()
-	r.Mount("/", api.Routes())
-	r.Handle("/*", server.FileServerHandler())
+	r.Mount("/api", api.APIRoutes())
+	r.Mount("/ws", api.WSRoutes())
+	r.Get("/*", server.FileServerHandler().ServeHTTP)
 
 	addr := fmt.Sprintf("%s:%d", host, port)
 	listener, err := net.Listen("tcp", addr)
