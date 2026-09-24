@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ConnectionState } from '../types';
-import { Activity, ArrowDownLeft, ArrowUpRight, HardDrive, Wifi, WifiOff } from 'lucide-react';
+import { Activity, ArrowDownLeft, ArrowUpRight, HardDrive, Download } from 'lucide-react';
 
 interface StatsBarProps {
   state: ConnectionState;
@@ -17,6 +17,22 @@ export const StatsBar: React.FC<StatsBarProps> = ({
   totalBytes,
   heartbeatLatencyMs,
 }) => {
+  const [sparklineData, setSparklineData] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [lastTotalFrames, setLastTotalFrames] = useState(framesIn + framesOut);
+
+  // Update sparkline points every 1 second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTotal = framesIn + framesOut;
+      const delta = Math.max(0, currentTotal - lastTotalFrames);
+      setLastTotalFrames(currentTotal);
+      setSparklineData((prev) => [...prev.slice(1), delta]);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [framesIn, framesOut, lastTotalFrames]);
+
+  const maxVal = Math.max(...sparklineData, 5);
+
   const getStatusBadge = () => {
     switch (state) {
       case 'connected':
@@ -44,10 +60,14 @@ export const StatsBar: React.FC<StatsBarProps> = ({
     }
   };
 
+  const handleDownloadHAR = () => {
+    window.location.href = '/api/v1/export/har';
+  };
+
   return (
     <header className="h-14 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-5 flex items-center justify-between z-20">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center font-black text-white text-base shadow-lg shadow-blue-500/20">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center font-black text-white text-base shadow-lg shadow-blue-500/20">
           S
         </div>
         <div className="flex items-baseline gap-2">
@@ -59,6 +79,27 @@ export const StatsBar: React.FC<StatsBarProps> = ({
       </div>
 
       <div className="flex items-center gap-4 text-xs font-mono">
+        {/* Real-time Sparkline Throughput Chart */}
+        <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800/40 border border-slate-700/40" title="Stream Pulse (Msg/sec)">
+          <span className="text-slate-400 text-[10px] uppercase font-semibold">Activity</span>
+          <svg className="w-20 h-6 overflow-visible">
+            <polyline
+              fill="none"
+              stroke="#38bdf8"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              points={sparklineData
+                .map((val, idx) => {
+                  const x = (idx / (sparklineData.length - 1)) * 80;
+                  const y = 24 - (val / maxVal) * 20 - 2;
+                  return `${x},${y}`;
+                })
+                .join(' ')}
+            />
+          </svg>
+        </div>
+
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700/50">
           <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-400" />
           <span className="text-slate-400">IN:</span>
@@ -84,6 +125,16 @@ export const StatsBar: React.FC<StatsBarProps> = ({
             <span className="text-slate-100 font-semibold">{heartbeatLatencyMs.toFixed(1)} ms</span>
           </div>
         )}
+
+        {/* HAR Export Button */}
+        <button
+          onClick={handleDownloadHAR}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg text-slate-200 transition font-sans font-medium shadow"
+          title="Export current session frames as Chrome DevTools HAR 1.2"
+        >
+          <Download className="w-3.5 h-3.5 text-blue-400" />
+          <span>HAR 1.2</span>
+        </button>
 
         {getStatusBadge()}
       </div>

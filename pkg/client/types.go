@@ -73,8 +73,9 @@ type Frame struct {
 	Format    PayloadFormat     `json:"format"`
 	Length    int               `json:"length"`
 	Latency   time.Duration     `json:"latency,omitempty"`
-	EventName string            `json:"event_name,omitempty"`
-	Metadata  map[string]string `json:"metadata,omitempty"`
+	EventName    string            `json:"event_name,omitempty"`
+	Metadata     map[string]string `json:"metadata,omitempty"`
+	SchemaErrors []string          `json:"schema_errors,omitempty"`
 }
 
 // Summary returns a brief human-readable string for logging and TUI.

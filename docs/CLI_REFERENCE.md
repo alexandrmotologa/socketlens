@@ -67,7 +67,31 @@ socketlens connect wss://stream.binance.com:9443/ws/btcusdt@trade \
 
 ---
 
-## 3. `socketlens mock`
+## 3. `socketlens proxy`
+
+Starts a transparent bidirectional proxy forwarding client traffic to an upstream server, logging frames in real time with optional breakpoint tampering.
+
+```bash
+socketlens proxy <target-URL> [flags]
+```
+
+### Examples:
+```bash
+# Proxy local connections to a remote WebSocket server
+socketlens proxy wss://echo.websocket.events --port 8081
+
+# Intercept frames with breakpoint inspection enabled
+socketlens proxy wss://api.example.com/feed --port 8081 --breakpoint
+```
+
+### Flags:
+- `-p, --port int`: Local port to bind the proxy listener (default: `8081`).
+- `-b, --breakpoint`: Enable frame breakpoint suspension for live inspection and payload tampering before forwarding.
+
+---
+
+## 4. `socketlens mock`
+
 
 Starts a local mock stream server for integration testing and client resilience checks.
 
@@ -98,7 +122,7 @@ socketlens mock --port 8080 --mode echo --chaos-latency 200ms --chaos-drop 10
 
 ---
 
-## 4. `socketlens bench`
+## 5. `socketlens bench`
 
 Executes high-concurrency connection stress tests against a target streaming endpoint.
 
@@ -126,7 +150,7 @@ socketlens bench wss://api.example.com/stream \
 
 ---
 
-## 5. `socketlens record`
+## 6. `socketlens record`
 
 Captures frames from a live stream into a newline-delimited JSON archive.
 
@@ -141,7 +165,8 @@ socketlens record <URL> --out <file.jsonl> [flags]
 
 ---
 
-## 6. `socketlens replay`
+## 7. `socketlens replay`
+
 
 Replays a captured session file against a target endpoint with time-accurate offsets.
 

@@ -13,6 +13,7 @@ import (
 
 	"github.com/alexandrmotologa/socketlens/pkg/client"
 	"github.com/alexandrmotologa/socketlens/pkg/mock"
+	"github.com/alexandrmotologa/socketlens/pkg/proxy"
 	"github.com/alexandrmotologa/socketlens/pkg/server"
 	"github.com/alexandrmotologa/socketlens/pkg/session"
 	"github.com/alexandrmotologa/socketlens/pkg/stress"
@@ -39,6 +40,7 @@ func main() {
 
 	// Subcommands
 	rootCmd.AddCommand(newConnectCmd())
+	rootCmd.AddCommand(newProxyCmd())
 	rootCmd.AddCommand(newMockCmd())
 	rootCmd.AddCommand(newBenchCmd())
 	rootCmd.AddCommand(newRecordCmd())
@@ -133,6 +135,58 @@ func newConnectCmd() *cobra.Command {
 	cmd.Flags().Bool("insecure", false, "Skip TLS verification")
 	cmd.Flags().Bool("reconnect", true, "Enable automatic reconnection")
 	cmd.Flags().Duration("heartbeat", 15*time.Second, "WebSocket ping interval")
+
+	return cmd
+}
+
+func newProxyCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "proxy <target-URL>",
+		Short: "Start a transparent WebSocket interception proxy with live logging",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			targetURL := args[0]
+			port, _ := cmd.Flags().GetInt("port")
+			breakpoint, _ := cmd.Flags().GetBool("breakpoint")
+
+			cfg := proxy.ProxyConfig{
+				LocalPort:        port,
+				TargetURL:        targetURL,
+				EnableBreakpoint: breakpoint,
+			}
+
+			p := proxy.NewStreamProxy(cfg, func(f *client.Frame) {
+				arrow := "-> (upstream)"
+				if f.Direction == client.DirectionInbound {
+					arrow = "<- (downstream)"
+				}
+				fmt.Printf("[%s] %s %d bytes: %s\n", f.Timestamp.Format("15:04:05.000"), arrow, f.Length, string(f.Payload))
+			})
+
+			if err := p.Start(); err != nil {
+				return err
+			}
+			defer p.Stop()
+
+			fmt.Printf("\n🔀 SocketLens Interception Proxy running on 127.0.0.1:%d\n", port)
+			fmt.Printf("   Forwarding to: %s\n", targetURL)
+			if breakpoint {
+				fmt.Println("   Breakpoints: ENABLED (frames held for tampering)")
+			}
+			fmt.Println("   Point your client to: ws://127.0.0.1:" + fmt.Sprintf("%d", port))
+			fmt.Println("   Press Ctrl+C to terminate.")
+
+			sigChan := make(chan os.Signal, 1)
+			signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+			<-sigChan
+
+			fmt.Println("\nStopping proxy...")
+			return nil
+		},
+	}
+
+	cmd.Flags().IntP("port", "p", 8081, "Local port to listen on")
+	cmd.Flags().BoolP("breakpoint", "b", false, "Enable breakpoint frame tampering")
 
 	return cmd
 }

@@ -11,12 +11,19 @@ SocketLens is a local-first workbench and CLI for streaming protocols, including
 ## Capabilities
 
 - **Unified Stream Inspector**: Connect to `ws://`, `wss://`, Server-Sent Events (`http://`, `https://`), and Socket.io v4 endpoints with custom headers, query params, subprotocols, and TLS certificates.
+- **Bi-Directional Interception Proxy & Live Tampering**: Start a transparent local proxy to capture streaming frames in flight. Pause streams on breakpoints, inspect and modify payloads interactively, or drop packets before upstream forwarding.
+- **LLM and AI Stream Telemetry**: Inspect SSE token events with real-time Time-To-First-Token (TTFT in ms), Tokens Per Second (TPS), and inter-token jitter. Automatically reassemble fragmented tokens into full markdown text and parse structured tool calls.
+- **In-Flight Semantic Diffing**: Spot state changes across high-frequency message streams with instant structural and value-level JSON diffs.
+- **Real-Time JSON Schema Validation**: Enforce JSON Schema (Draft-07) contracts across live streams with visual timeline error flags for broken payload contracts.
+- **Event-Driven Auto-Responders**: Build automation rules that match incoming frame conditions and reply immediately with custom payloads.
+- **Universal Export**: Save sessions to Chrome DevTools-compatible HAR 1.2 archives or reproduce requests in one click via generated `wscat` and `curl` commands.
 - **In-Flight Binary Codecs**: Inspect binary payloads decoded on the fly. Supports MessagePack, CBOR, Protobuf, and Gzip-compressed frames alongside JSON and hex dump views.
 - **Embedded Mock Server with Chaos Testing**: Spin up local mock endpoints with configurable responses, token stream generation for simulated LLM output, and chaos options including latency injection, dropped frames, and forced socket resets.
 - **Stress and Concurrency Runner**: Benchmark backend stream capacity by driving 100 to 10,000 concurrent client connections with real-time latency percentiles (p50, p95, p99), error rates, and throughput metrics.
 - **Session Recording and Replay**: Record live streaming sessions to `.jsonl` archives and replay frame sequences with millisecond accuracy and adjustable speed multipliers.
 - **Dual Interface**: Run interactive sessions in your terminal through the built-in TUI or launch the local web studio with virtualized timeline scrolling and Monaco editor integration.
 - **Zero Runtime Dependencies**: Packaged as a single Go binary with an embedded React frontend, consuming under 35 MB of RAM at idle.
+
 
 ---
 
@@ -98,6 +105,15 @@ socketlens record wss://stream.binance.com:9443/ws/btcusdt@trade --out btc_trade
 # Replay recorded frames at 2x speed
 socketlens replay btc_trades.jsonl --target ws://localhost:8080/feed --speed 2.0
 ```
+
+### 7. Intercept and Tamper Live Streams
+
+Start a transparent interception proxy on port 8081 forwarding to an upstream endpoint with breakpoint inspection:
+
+```bash
+socketlens proxy wss://echo.websocket.events --port 8081 --breakpoint
+```
+
 
 ---
 

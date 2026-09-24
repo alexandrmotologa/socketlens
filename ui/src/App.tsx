@@ -7,10 +7,16 @@ import { FrameDetailPanel } from './components/FrameDetailPanel';
 import { MessageComposer } from './components/MessageComposer';
 import { MockServerPanel } from './components/MockServerPanel';
 import { StressRunnerPanel } from './components/StressRunnerPanel';
-import { Radio, Server, Gauge, Send } from 'lucide-react';
+import { ProxyPanel } from './components/ProxyPanel';
+import { LLMInspectorPanel } from './components/LLMInspectorPanel';
+import { SchemaValidatorPanel } from './components/SchemaValidatorPanel';
+import { AutomationRulesPanel } from './components/AutomationRulesPanel';
+import { Radio, Server, Gauge, Shuffle, Sparkles, ShieldCheck, Bot } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'stream' | 'mock' | 'bench'>('stream');
+  const [activeTab, setActiveTab] = useState<
+    'stream' | 'proxy' | 'llm' | 'schema' | 'rules' | 'mock' | 'bench'
+  >('stream');
   const [activeConnId, setActiveConnId] = useState<string | null>(null);
   const [connState, setConnState] = useState<ConnectionState>('disconnected');
   const [frames, setFrames] = useState<Frame[]>([]);
@@ -138,6 +144,12 @@ export const App: React.FC = () => {
     setTotalBytes(0);
   };
 
+  // Find previous frame in sequence for diffing
+  const selectedIndex = selectedFrame
+    ? frames.findIndex((f) => f.id === selectedFrame.id)
+    : -1;
+  const previousFrame = selectedIndex > 0 ? frames[selectedIndex - 1] : null;
+
   return (
     <div className="flex flex-col h-screen w-screen bg-background overflow-hidden text-slate-100">
       {/* Top Telemetry Header */}
@@ -149,16 +161,16 @@ export const App: React.FC = () => {
       />
 
       {/* Main Studio 3-Column Layout */}
-      <div className="flex-1 grid grid-cols-[380px_1fr_400px] min-h-0 divide-x divide-slate-800/80">
-        {/* Left Column: Workbench Tools */}
+      <div className="flex-1 grid grid-cols-[400px_1fr_420px] min-h-0 divide-x divide-slate-800/80">
+        {/* Left Column: Workbench Subsystems */}
         <div className="flex flex-col bg-slate-900/60 min-h-0">
           {/* Subsystem Navigation Tabs */}
-          <div className="flex border-b border-slate-800/80 bg-slate-950/60">
+          <div className="flex border-b border-slate-800/80 bg-slate-950/70 overflow-x-auto scrollbar-none">
             <button
               onClick={() => setActiveTab('stream')}
-              className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 transition ${
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
                 activeTab === 'stream'
-                  ? 'border-blue-500 text-blue-400 bg-blue-500/5'
+                  ? 'border-blue-500 text-blue-400 bg-blue-500/10'
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -167,10 +179,58 @@ export const App: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setActiveTab('proxy')}
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
+                activeTab === 'proxy'
+                  ? 'border-purple-500 text-purple-400 bg-purple-500/10'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Shuffle className="w-3.5 h-3.5" />
+              Proxy
+            </button>
+
+            <button
+              onClick={() => setActiveTab('llm')}
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
+                activeTab === 'llm'
+                  ? 'border-indigo-500 text-indigo-400 bg-indigo-500/10'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              LLM
+            </button>
+
+            <button
+              onClick={() => setActiveTab('schema')}
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
+                activeTab === 'schema'
+                  ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Schema
+            </button>
+
+            <button
+              onClick={() => setActiveTab('rules')}
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
+                activeTab === 'rules'
+                  ? 'border-amber-500 text-amber-400 bg-amber-500/10'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5" />
+              Rules
+            </button>
+
+            <button
               onClick={() => setActiveTab('mock')}
-              className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 transition ${
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
                 activeTab === 'mock'
-                  ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
+                  ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -180,9 +240,9 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('bench')}
-              className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 transition ${
+              className={`px-3 py-2.5 text-[11px] font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition ${
                 activeTab === 'bench'
-                  ? 'border-cyan-500 text-cyan-400 bg-cyan-500/5'
+                  ? 'border-cyan-500 text-cyan-400 bg-cyan-500/10'
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -191,8 +251,8 @@ export const App: React.FC = () => {
             </button>
           </div>
 
-          {/* Tab Content */}
-          <div className="flex-1 overflow-y-auto">
+          {/* Subsystem Panels */}
+          <div className="flex-1 overflow-y-auto min-h-0">
             {activeTab === 'stream' && (
               <div className="flex flex-col h-full">
                 <ConnectBar
@@ -209,6 +269,14 @@ export const App: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {activeTab === 'proxy' && <ProxyPanel />}
+
+            {activeTab === 'llm' && <LLMInspectorPanel />}
+
+            {activeTab === 'schema' && <SchemaValidatorPanel />}
+
+            {activeTab === 'rules' && <AutomationRulesPanel />}
 
             {activeTab === 'mock' && (
               <MockServerPanel
@@ -233,10 +301,11 @@ export const App: React.FC = () => {
           />
         </div>
 
-        {/* Right Column: Frame Detail Inspector */}
+        {/* Right Column: Frame Detail & Diff Inspector */}
         <div className="flex flex-col min-h-0">
           <FrameDetailPanel
             frame={selectedFrame}
+            previousFrame={previousFrame}
             onResend={(payload) => handleSend(payload, 'json')}
           />
         </div>

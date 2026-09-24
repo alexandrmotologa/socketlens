@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ConnectionConfig, Protocol } from '../types';
-import { Play, Square, Settings2, ShieldAlert } from 'lucide-react';
+import { Play, Square, Settings2, ShieldAlert, Terminal, Check } from 'lucide-react';
 
 interface ConnectBarProps {
   onConnect: (cfg: ConnectionConfig) => void;
@@ -21,6 +21,7 @@ export const ConnectBar: React.FC<ConnectBarProps> = ({
   const [showOptions, setShowOptions] = useState(false);
   const [tlsInsecure, setTlsInsecure] = useState(false);
   const [autoReconnect, setAutoReconnect] = useState(true);
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +57,40 @@ export const ConnectBar: React.FC<ConnectBarProps> = ({
     } else if (p === 'ws' && url.startsWith('http')) {
       setUrl('wss://echo.websocket.events');
     }
+  };
+
+  const copyWscat = () => {
+    let cmd = `wscat -c '${url}'`;
+    if (headersJson.trim()) {
+      try {
+        const h = JSON.parse(headersJson);
+        Object.entries(h).forEach(([k, v]) => {
+          cmd += ` -H '${k}: ${v}'`;
+        });
+      } catch (err) {}
+    }
+    navigator.clipboard.writeText(cmd);
+    setCopiedCmd('wscat');
+    setTimeout(() => setCopiedCmd(null), 2000);
+  };
+
+  const copyCurl = () => {
+    let cmd = `curl -N`;
+    if (protocol === 'sse') {
+      cmd += ` -H 'Accept: text/event-stream'`;
+    }
+    if (headersJson.trim()) {
+      try {
+        const h = JSON.parse(headersJson);
+        Object.entries(h).forEach(([k, v]) => {
+          cmd += ` -H '${k}: ${v}'`;
+        });
+      } catch (err) {}
+    }
+    cmd += ` '${url}'`;
+    navigator.clipboard.writeText(cmd);
+    setCopiedCmd('curl');
+    setTimeout(() => setCopiedCmd(null), 2000);
   };
 
   return (
@@ -151,6 +186,32 @@ export const ConnectBar: React.FC<ConnectBarProps> = ({
                 rows={2}
                 className="w-full bg-slate-900 border border-slate-800 rounded-md p-2 font-mono text-[11px] text-slate-200 outline-none focus:border-blue-500"
               />
+            </div>
+
+            {/* Quick Export CLI Commands */}
+            <div className="flex items-center justify-between pt-1 border-t border-slate-800/80">
+              <span className="text-slate-400 text-[10px] flex items-center gap-1">
+                <Terminal className="w-3 h-3 text-cyan-400" />
+                Copy CLI Execution:
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={copyWscat}
+                  className="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 rounded text-[10px] font-mono flex items-center gap-1 transition"
+                >
+                  {copiedCmd === 'wscat' ? <Check className="w-3 h-3 text-emerald-400" /> : null}
+                  {copiedCmd === 'wscat' ? 'Copied' : 'wscat'}
+                </button>
+                <button
+                  type="button"
+                  onClick={copyCurl}
+                  className="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 rounded text-[10px] font-mono flex items-center gap-1 transition"
+                >
+                  {copiedCmd === 'curl' ? <Check className="w-3 h-3 text-emerald-400" /> : null}
+                  {copiedCmd === 'curl' ? 'Copied' : 'cURL'}
+                </button>
+              </div>
             </div>
           </div>
         )}

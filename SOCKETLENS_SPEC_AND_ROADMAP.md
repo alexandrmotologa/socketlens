@@ -278,6 +278,26 @@ socketlens/
 - [x] 6.6 Embed frontend assets into Go binary using `go:embed`.
 - [x] 6.7 Package single-binary release and verify complete end-to-end functionality across macOS, Linux, and Windows.
 
+### Phase 7: Advanced Interception Proxy, AI/LLM Stream Telemetry & Studio Enhancements
+- [x] 7.1 **Bi-directional Interception Proxy & Live Tampering (`pkg/proxy`, `socketlens proxy`, `ProxyPanel`):**
+  - Transparent forward proxy for WebSockets with breakpoint support.
+  - Allows developers to suspend frames in flight, inspect, modify payload bytes, or drop frames before upstream forwarding.
+- [x] 7.2 **LLM & AI Stream Inspector (`pkg/llm`, `LLMInspectorPanel`):**
+  - Real-time SSE streaming metrics: Time-To-First-Token (TTFT in ms), Tokens Per Second (TPS), average inter-token jitter.
+  - Live token assembler with auto-reconstructed message markdown and structured Tool-Call argument extraction (OpenAI, Anthropic, Ollama).
+- [x] 7.3 **In-Flight State Diffing (`pkg/codec/diff.go`, `FrameDetailPanel`):**
+  - Structural and value-level JSON diffing comparing sequential streaming frames to pinpoint delta changes instantly.
+- [x] 7.4 **Real-Time JSON Schema Validation (`pkg/schema`, `SchemaValidatorPanel`):**
+  - Live validation of all incoming and outgoing stream frames against JSON Schema Draft-07.
+  - Real-time visual error flags in the timeline for breaking contract changes and missing fields.
+- [x] 7.5 **Event-Driven Auto-Responders & Automation Rules (`pkg/rules`, `AutomationRulesPanel`):**
+  - Scriptable If-This-Then-That automation rules for immediate mock replies, heartbeat ping-pong, and contract simulation.
+- [x] 7.6 **Universal Export (`pkg/session/har.go`, `StatsBar`, `ConnectBar`):**
+  - Export live stream sessions into Chrome DevTools-compatible HAR 1.2 archives.
+  - Instant 1-click CLI command reproduction (`wscat` and `curl -N`).
+  - Real-time SVG throughput sparklines visualizing stream velocity.
+
+
 ---
 
 ## 7. Verification & Acceptance Criteria

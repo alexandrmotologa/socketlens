@@ -104,3 +104,29 @@ The web studio is located in `ui/` and builds with Vite, React 19, TypeScript, a
 - **Timeline Virtualization**: Uses `@tanstack/react-virtual` to display up to 100,000 frames without DOM bloat.
 - **Payload Inspection**: Integrates Monaco Editor for JSON formatting, syntax validation, and message drafting.
 - **State Management**: Uses lightweight reactive stores to isolate frame ingestion from inspector panel re-renders, preventing UI stutter during high-frequency streaming.
+
+---
+
+## 7. Advanced Interception & Telemetry Subsystems
+
+### Bi-directional Interception Proxy (`pkg/proxy`)
+Operates as a local TCP/WebSocket forward proxy. Incoming frames can be intercepted on breakpoints, holding execution in a suspended state (`resumeCh` / `dropCh`). Developers can inspect payloads, modify byte contents in the web studio or CLI, and resume forwarding or drop frames entirely.
+
+### LLM Stream Inspector (`pkg/llm`)
+Parses Server-Sent Events token deltas (OpenAI, Anthropic, Ollama) on the fly:
+- Computes **Time-To-First-Token (TTFT)** measuring the elapsed time between request dispatch and the initial token frame.
+- Calculates **Tokens Per Second (TPS)** throughput and inter-token arrival jitter.
+- Reconstructs full response markdown text in memory while extracting structured tool calls (`id`, `name`, `arguments`).
+
+### In-Flight State Diffing (`pkg/codec/diff.go`)
+Recursively traverses JSON key-value maps and arrays between sequential frames. Emits structured changes categorized as `added`, `removed`, or `modified` with previous and current values to surface delta state mutations.
+
+### Real-Time JSON Schema Validation (`pkg/schema`)
+Compiles JSON Schema definitions (Draft-07) and validates payload bytes on incoming and outgoing frames. Discrepancies generate violation records attached directly to the `Frame` metadata and flagged in the UI timeline.
+
+### Event-Driven Automation Rules (`pkg/rules`)
+Enforces scriptable If-This-Then-That rules evaluated on inbound frames. Supports string matching, exact equality, event name matching, and opcode filtering, triggering immediate automated replies via the connection manager.
+
+### Universal Export (`pkg/session/har.go`)
+Converts recorded streaming sessions into HTTP Archive 1.2 (`.har`) format according to the Chrome DevTools network specification, preserving millisecond timestamps, opcodes, and directionality.
+

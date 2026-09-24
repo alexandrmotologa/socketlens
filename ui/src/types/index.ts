@@ -19,7 +19,9 @@ export interface Frame {
   latency_ms?: number;
   event_name?: string;
   metadata?: Record<string, string>;
+  schema_errors?: string[];
 }
+
 
 export interface ConnectionConfig {
   id?: string;
@@ -78,3 +80,69 @@ export interface BenchmarkReport {
   messages_per_sec: number;
   bytes_per_sec: number;
 }
+
+export interface BreakpointItem {
+  id: string;
+  direction: Direction;
+  opcode: OpCode;
+  payload: string;
+  timestamp: string;
+}
+
+export interface ProxyStatus {
+  running: boolean;
+  local_port?: number;
+  target_url?: string;
+  breakpoints_enabled?: boolean;
+  pending_breakpoints?: BreakpointItem[];
+}
+
+export interface ToolCall {
+  id: string;
+  name: string;
+  arguments: string;
+}
+
+export interface LLMReport {
+  model: string;
+  started_at: string;
+  first_token_at?: string;
+  finished_at?: string;
+  ttft_ms: number;
+  total_tokens: number;
+  tokens_per_sec: number;
+  avg_jitter_ms: number;
+  reconstructed_text: string;
+  tool_calls?: ToolCall[];
+  is_finished: boolean;
+}
+
+export interface AutomationRule {
+  id?: string;
+  name: string;
+  enabled?: boolean;
+  condition: 'contains' | 'exact' | 'event_name' | 'opcode';
+  pattern: string;
+  action: 'reply' | 'drop' | 'alert';
+  response?: string;
+}
+
+export interface SchemaViolation {
+  property: string;
+  expected: string;
+  actual: string;
+  message: string;
+}
+
+export interface DiffChange {
+  path: string;
+  kind: 'added' | 'removed' | 'modified';
+  old_value?: any;
+  new_value?: any;
+}
+
+export interface DiffResult {
+  has_changes: boolean;
+  changes: DiffChange[];
+}
+
