@@ -1,0 +1,6 @@
+{"seq":1,"offset_ms":0,"direction":"outbound","protocol":"ws","opcode":"text","payload":"{\"action\":\"subscribe\",\"channel\":\"orders\"}","format":"json"}
+{"seq":2,"offset_ms":45,"direction":"inbound","protocol":"ws","opcode":"text","payload":"{\"status\":\"subscribed\",\"channel\":\"orders\"}","format":"json"}
+{"seq":3,"offset_ms":120,"direction":"inbound","protocol":"ws","opcode":"text","payload":"{\"type\":\"order_created\",\"id\":\"ord_9901\",\"price\":64250.00,\"qty\":0.5}","format":"json"}
+{"seq":4,"offset_ms":280,"direction":"inbound","protocol":"ws","opcode":"text","payload":"{\"type\":\"order_matched\",\"id\":\"ord_9901\",\"fill_price\":64250.00}","format":"json"}
+{"seq":5,"offset_ms":350,"direction":"outbound","protocol":"ws","opcode":"ping","payload":"ping","format":"text"}
+{"seq":6,"offset_ms":365,"direction":"inbound","protocol":"ws","opcode":"pong","payload":"pong","format":"text"}

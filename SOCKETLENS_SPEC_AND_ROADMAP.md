@@ -232,51 +232,51 @@ socketlens/
 ## 6. Implementation Roadmap & Execution Checklist
 
 ### Phase 1: Go Module Setup & Multi-Protocol Client Core
-- [ ] 1.1 Initialize Go module `github.com/alexandrmotologa/socketlens` and configure dependencies (`coder/websocket`, `r3labs/sse/v2`, `spf13/cobra`, `go-chi/chi/v5`, `go-chi/cors`, `vmihailenco/msgpack/v5`, `fxamacker/cbor/v2`).
-- [ ] 1.2 Implement `pkg/client/types.go` modeling Frame, Direction, Protocol, OpCode, PayloadFormat, and ConnectionState.
-- [ ] 1.3 Implement `pkg/client/websocket.go` with RFC 6455 support, ping/pong latency measurement, and automatic reconnection.
-- [ ] 1.4 Implement `pkg/client/sse.go` supporting `text/event-stream` line parsing, event names, retry directives, and Last-Event-ID recovery.
-- [ ] 1.5 Implement `pkg/client/socketio.go` handling Engine.IO v4 handshake, packet framing, and namespace event envelopes.
-- [ ] 1.6 Implement `pkg/client/client.go` universal connection manager dispatching across protocols.
-- [ ] 1.7 Write automated tests in `pkg/client/client_test.go` verifying WebSocket, SSE, and reconnection behavior against test servers.
+- [x] 1.1 Initialize Go module `github.com/alexandrmotologa/socketlens` and configure dependencies (`coder/websocket`, `r3labs/sse/v2`, `spf13/cobra`, `go-chi/chi/v5`, `go-chi/cors`, `vmihailenco/msgpack/v5`, `fxamacker/cbor/v2`).
+- [x] 1.2 Implement `pkg/client/types.go` modeling Frame, Direction, Protocol, OpCode, PayloadFormat, and ConnectionState.
+- [x] 1.3 Implement `pkg/client/websocket.go` with RFC 6455 support, ping/pong latency measurement, and automatic reconnection.
+- [x] 1.4 Implement `pkg/client/sse.go` supporting `text/event-stream` line parsing, event names, retry directives, and Last-Event-ID recovery.
+- [x] 1.5 Implement `pkg/client/socketio.go` handling Engine.IO v4 handshake, packet framing, and namespace event envelopes.
+- [x] 1.6 Implement `pkg/client/client.go` universal connection manager dispatching across protocols.
+- [x] 1.7 Write automated tests in `pkg/client/client_test.go` verifying WebSocket, SSE, and reconnection behavior against test servers.
 
 ### Phase 2: Binary Codec Pipeline & Serialization Engine
-- [ ] 2.1 Implement `pkg/codec/detector.go` sniffing magic bytes for MessagePack, CBOR, Protobuf wire format, Gzip, and JSON.
-- [ ] 2.2 Implement `pkg/codec/msgpack.go` converting MessagePack buffers into structured JSON AST.
-- [ ] 2.3 Implement `pkg/codec/cbor.go` converting CBOR binary frames into JSON AST.
-- [ ] 2.4 Implement `pkg/codec/protobuf.go` dynamic wire format decoder parsing varints, fixed64, length-delimited, and fixed32 tags without requiring static proto stubs.
-- [ ] 2.5 Implement `pkg/codec/gzip.go` and `pkg/codec/hex.go` for decompression and 16-byte hex dump views.
-- [ ] 2.6 Write automated tests in `pkg/codec/codec_test.go` verifying round-trip serialization and detection.
+- [x] 2.1 Implement `pkg/codec/detector.go` sniffing magic bytes for MessagePack, CBOR, Protobuf wire format, Gzip, and JSON.
+- [x] 2.2 Implement `pkg/codec/msgpack.go` converting MessagePack buffers into structured JSON AST.
+- [x] 2.3 Implement `pkg/codec/cbor.go` converting CBOR binary frames into JSON AST.
+- [x] 2.4 Implement `pkg/codec/protobuf.go` dynamic wire format decoder parsing varints, fixed64, length-delimited, and fixed32 tags without requiring static proto stubs.
+- [x] 2.5 Implement `pkg/codec/gzip.go` and `pkg/codec/hex.go` for decompression and 16-byte hex dump views.
+- [x] 2.6 Write automated tests in `pkg/codec/codec_test.go` verifying round-trip serialization and detection.
 
 ### Phase 3: Embedded Mock Server & Chaos Middleware
-- [ ] 3.1 Implement `pkg/mock/server.go` starting an in-memory HTTP/WS/SSE server on configurable ports.
-- [ ] 3.2 Implement Echo and Broadcast handlers for WebSocket connections.
-- [ ] 3.3 Implement continuous event generators:
+- [x] 3.1 Implement `pkg/mock/server.go` starting an in-memory HTTP/WS/SSE server on configurable ports.
+- [x] 3.2 Implement Echo and Broadcast handlers for WebSocket connections.
+- [x] 3.3 Implement continuous event generators:
   - LLM token stream generator emitting tokens at configurable rates (1 to 100 tokens/s).
   - Financial orderbook ticker generator.
-- [ ] 3.4 Implement Chaos Middleware introducing configurable latency (50 to 500ms), packet loss (0 to 100%), and abrupt connection resets.
-- [ ] 3.5 Write unit and integration tests in `pkg/mock/mock_test.go` verifying mock streaming behavior and chaos disruption.
+- [x] 3.4 Implement Chaos Middleware introducing configurable latency (50 to 500ms), packet loss (0 to 100%), and abrupt connection resets.
+- [x] 3.5 Write unit and integration tests in `pkg/mock/mock_test.go` verifying mock streaming behavior and chaos disruption.
 
 ### Phase 4: Stress Benchmarking & Session Recorder / Replayer
-- [ ] 4.1 Implement `pkg/stress/runner.go` managing concurrent connection pools (100 to 10,000 workers).
-- [ ] 4.2 Implement `pkg/stress/metrics.go` calculating p50, p90, p95, p99 handshake latency, throughput in msg/s and KB/s, and error rates.
-- [ ] 4.3 Implement `pkg/session/recorder.go` streaming captured frames into newline-delimited JSON (`.jsonl`).
-- [ ] 4.4 Implement `pkg/session/replayer.go` reading captured sessions and dispatching frames with millisecond-exact relative timing and speed multipliers (0.1x to 10x).
-- [ ] 4.5 Write tests validating stress test execution and recorder/replayer timing accuracy.
+- [x] 4.1 Implement `pkg/stress/runner.go` managing concurrent connection pools (100 to 10,000 workers).
+- [x] 4.2 Implement `pkg/stress/metrics.go` calculating p50, p90, p95, p99 handshake latency, throughput in msg/s and KB/s, and error rates.
+- [x] 4.3 Implement `pkg/session/recorder.go` streaming captured frames into newline-delimited JSON (`.jsonl`).
+- [x] 4.4 Implement `pkg/session/replayer.go` reading captured sessions and dispatching frames with millisecond-exact relative timing and speed multipliers (0.1x to 10x).
+- [x] 4.5 Write tests validating stress test execution and recorder/replayer timing accuracy.
 
 ### Phase 5: CLI Architecture & Interactive Terminal TUI Mode
-- [ ] 5.1 Implement Cobra CLI entrypoint in `cmd/socketlens/main.go` and subcommands: `connect`, `mock`, `bench`, `record`, `replay`.
-- [ ] 5.2 Implement Bubbletea interactive TUI in `pkg/tui/` with dual-pane layout (Connection stats on top, stream timeline on bottom).
-- [ ] 5.3 Implement keyboard controls (arrow navigation, pause Space, inspect Enter, quit q) with color-coded directional frames.
+- [x] 5.1 Implement Cobra CLI entrypoint in `cmd/socketlens/main.go` and subcommands: `connect`, `mock`, `bench`, `record`, `replay`.
+- [x] 5.2 Implement Bubbletea interactive TUI in `pkg/tui/` with dual-pane layout (Connection stats on top, stream timeline on bottom).
+- [x] 5.3 Implement keyboard controls (arrow navigation, pause Space, inspect Enter, quit q) with color-coded directional frames.
 
 ### Phase 6: Embedded Web Studio & Single-Binary Delivery
-- [ ] 6.1 Scaffold Vite + React 19 + TypeScript + Tailwind CSS in `ui/`.
-- [ ] 6.2 Build high-performance Frame Timeline with virtualized rendering for 50k+ frames.
-- [ ] 6.3 Implement Monaco Message Composer with custom JSON templates and auto-dispatch intervals.
-- [ ] 6.4 Implement Mock Server & Stress Runner dashboards with real-time SVG charts.
-- [ ] 6.5 Build internal WebSocket control bus in `pkg/server/hub.go` bridging the Go engine to the browser studio.
-- [ ] 6.6 Embed frontend assets into Go binary using `go:embed`.
-- [ ] 6.7 Package single-binary release and verify complete end-to-end functionality across macOS, Linux, and Windows.
+- [x] 6.1 Scaffold Vite + React 19 + TypeScript + Tailwind CSS in `ui/`.
+- [x] 6.2 Build high-performance Frame Timeline with virtualized rendering for 50k+ frames.
+- [x] 6.3 Implement Monaco Message Composer with custom JSON templates and auto-dispatch intervals.
+- [x] 6.4 Implement Mock Server & Stress Runner dashboards with real-time SVG charts.
+- [x] 6.5 Build internal WebSocket control bus in `pkg/server/hub.go` bridging the Go engine to the browser studio.
+- [x] 6.6 Embed frontend assets into Go binary using `go:embed`.
+- [x] 6.7 Package single-binary release and verify complete end-to-end functionality across macOS, Linux, and Windows.
 
 ---
 

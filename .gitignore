@@ -5,9 +5,8 @@ dist/
 *.exe~
 *.dll
 *.so
-*.dylib
-socketlens
-socketlens.exe
+/socketlens
+/socketlens.exe
 
 # Go Test & Coverage
 *.out

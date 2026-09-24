@@ -1,0 +1,10 @@
+{
+  "port": 8080,
+  "route": "/ws/feed",
+  "mode": "echo",
+  "rate": 10,
+  "chaos": {
+    "latency": 50000000,
+    "drop_rate": 5
+  }
+}
